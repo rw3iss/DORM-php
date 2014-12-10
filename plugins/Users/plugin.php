@@ -13,7 +13,7 @@
 
 require_once('lib/user.php');
 
-class Users extends DormPlugin {
+class Users extends \Dorm\Models\DormPlugin {
 	var $user_session_key = 'CURRENT_USER';
 
     function on_load() {

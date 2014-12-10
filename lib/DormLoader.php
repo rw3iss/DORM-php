@@ -64,7 +64,7 @@ class DormLoader extends Models\DormSingleton {
 		//Setup basic response handlers
 		$dorm->response = new DormResponseHandler();
 
-		//Setup basic response handlers
+		//Setup basic error handlers
 		$dorm->error_handler = new DormErrorHandler();
 
 		/* Gather the current request details */
@@ -84,10 +84,13 @@ class DormLoader extends Models\DormSingleton {
 				$dorm->router->routeRequest($request);
 
 			return;
-		} 
+		}  else {
+			if($request->uri != '/dorm/install')
+				dorm_redirect('/dorm');
+		}
 
 		/* Basic setup is finished, now move on to building and request fulfillment */
-		$this->build_dorm();
+		self::_buildDorm();
 
 		$dorm->router->routeRequest($request);
 
@@ -98,7 +101,7 @@ class DormLoader extends Models\DormSingleton {
 	 * Populates the global Dorm object with necessary libraries.
 	 * TODO: Pull this object as a singleton from a Cache.
 	 */
-	function build_dorm() {
+	private static function _buildDorm() {
 		global $dorm;
 		global $dorm_config;
 		global $dorm_routes;
@@ -124,8 +127,13 @@ class DormLoader extends Models\DormSingleton {
 					$path = DORM_PATH . '/plugins/' . $plugin . '/plugin.php';
 					require_once($path);
 
-					//Initialize the plugin object
-					$po = new $plugin();
+					//Initialize the plugin object, first trying without a namespace:
+					try {
+						$po = new $plugin();
+					} catch(Exception $ex) {
+						$pluginName = "\Dorm\Plugins" . $plugin;
+						$po = new $pluginName();
+					}
 
 					//If the plugin defines a specific key, we will use this to reference the plugin
 					//on the Dorm object. Otherwise, we just reference the plugin usings its name.
@@ -153,62 +161,5 @@ class DormLoader extends Models\DormSingleton {
 	}
 
 }
-
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Entry facade to dorm system. Loads basic elements that don't require a Dorm
- * installation, and then checks for installation. If it is installed, it will
- * proceed to building the Dorm object and its layers.
- *
- */
-function dorm_initialize() {
-	
-}
-
-/**
- * Filters the incoming request to a suitable controller for fulfillment 
- *
- */
-function dorm_handle_current_request($uri = null) {
-	global $dorm; 
-
-	if ($uri == null) {
-		$uri = $_SERVER['REQUEST_URI'];
-	}
-
-	// Route the current request
-	$dorm->router->routeRequest($uri);
-
-	$class  = $dorm->router->class;
-	$method = $dorm->router->method;
-
-	$dorm->controller = null; // for this request
-
-	if(class_exists($class) == false)
-	{
-		if ( ! file_exists(DORM_PATH.'/controllers/'.$class.'.php'))
-		{
-			//check system files too:
-			if ( ! file_exists(DORM_PATH.'/lib/core/controllers/'.$class.'.php')) {
-				$dorm->response->error_response("Could not find class file.", 404, "{$class}/{$method}");
-			} else {
-				include_once(DORM_PATH.'/lib/core/controllers/'.$class.'.php');
-			}
-		} else {
-			include_once(DORM_PATH.'/lib/core/controllers/'.$class.'.php');
-		}
-
-		$dorm->controller = new $class();
-	} else {
-	    log_message('error', 'Class already exists: ' . $class);
-	}
-
-	// Call the requested method.
-	// Any URI segments present (besides the class/function) will be passed to the method for convenience
-	call_user_func_array(array(&$dorm->controller, $method), array_slice($dorm->router->uri_segments, 2));
-}
-
 
 ?>

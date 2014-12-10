@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Mobile Detect Library
  * =====================
@@ -22,7 +23,7 @@
  * @version     2.8.0
  */
 
-class MobileDetect extends DormPlugin
+class MobileDetect extends \Dorm\Models\DormPlugin
 {
 
     /**

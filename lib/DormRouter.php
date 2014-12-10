@@ -292,7 +292,7 @@ class DormRouter {
 				$file . ". Method: " . $route->method);
 		}
 
-		$routeClass->{$route->method}();
+		call_user_func_array(array(&$routeClass, $route->method), array());
 	}
 
 	function _set_default_controller()

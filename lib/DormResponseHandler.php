@@ -9,6 +9,7 @@ namespace Dorm;
  *   ResponseHandler->respond($result)
  * ie: JsonResponseHandler->respond($result); prints json
  * ie: ViewResponseHandler->respond($view); prints the view to the browser
+ * TODO: needs to be cleaned up
  */
 
 class DormResponseHandler {
@@ -30,6 +31,23 @@ class DormResponseHandler {
 		}
 
 		return $this->_load_view($view_path, $return);
+	}
+
+	// Add the view directly to the current buffer output, in place.
+	function insert($view) {
+		//serve the view depending on which environment we're in
+		$viewPath = DORM_PATH . (strpos($view, '/') == 0 ? '' : '/') . $view;
+
+		if (strpos($view,'.') === FALSE) {
+			$viewPath .= '.php';
+		}
+
+		if ( ! file_exists($viewPath))
+		{
+			throw new DormException("Could not locate the view file for inclusion: " . $viewPath);
+		}
+
+		$this->_load_view($viewPath, false);
 	}
 
 	//Loads a view based on an absolute path
@@ -119,7 +137,7 @@ class DormResponseHandler {
 		exit();
 	}
 
-	// Sets the output
+	// Adds content directly to the current output
 	function append_output($output)
 	{
 		if ($this->final_output == '')
@@ -135,7 +153,7 @@ class DormResponseHandler {
 	}
 
 	// Actually outputs the output
-	function _display($output = '') {
+	private function _display($output = '') {
 		global $dorm;
 
 		//TOOD: implement caching of output
@@ -155,7 +173,7 @@ class DormResponseHandler {
 	}
 
 	// Does the loading work. If return is true, it will return the view as a string instead of rendering it.
-	function _load_view($view_path, $return) {
+	private function _load_view($view_path, $return) {
 		global $dorm;
 
 		if ( ! file_exists($view_path))

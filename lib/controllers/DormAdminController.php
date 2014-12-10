@@ -13,8 +13,6 @@ class DormAdminController extends \Dorm\Models\DormController {
 			debug("ALREADY INSTALLED");
 		}
 
-		debug("INSTALL", $dorm->request->type);
-
 		switch($dorm->request->type) {
 			case 'GET':
 				$dorm->response->system_view('dorm_install');
@@ -30,6 +28,11 @@ class DormAdminController extends \Dorm\Models\DormController {
 
 	private function _do_install() {
 		debug("installing");
+	}
+
+	function runTests() {
+		debug("Loading tests");
+		dorm()->response->insert("/lib/tests/dormTests.html");
 	}
 }
 

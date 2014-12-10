@@ -11,7 +11,7 @@ function dorm() {
 }
 
 function dorm_is_installed() {
-	return false;
+	return true;
 }
 
 function dorm_redirect($uri) {

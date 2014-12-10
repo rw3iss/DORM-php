@@ -1,5 +1,5 @@
 <?php 
-dorm()->response->system_view('dorm_header');
+dorm()->response->insert('lib/views/shared/dorm_header.php');
 ?>
 
 <div id="install">
@@ -52,5 +52,5 @@ dorm()->response->system_view('dorm_header');
 </div>
 
 <?php 
-dorm()->response->system_view('dorm_footer');
+dorm()->response->insert('lib/views/shared/dorm_footer.php');
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class DefaultController extends DormController {
+class DefaultController extends \Dorm\Models\DormController {
 
 	function index() {
 		dorm()->response->responsive_view('index');

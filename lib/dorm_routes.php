@@ -15,4 +15,7 @@ $dorm_routes['/api'] = '/lib/controllers/dormrestcontroller/request';
 
 $dorm_routes['/dorm/install'] = '/lib/controllers/dormadmincontroller/install';
 
+/* Tests page */
+$dorm_routes['/dorm/tests'] = '/lib/controllers/dormadmincontroller/runTests';
+
 ?>

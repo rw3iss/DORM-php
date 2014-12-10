@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Session - Interface to store information across multiple requests for a given user/session id.
  */
 
-class Session extends DormPlugin {
+class Session extends \Dorm\Models\DormPlugin {
 
 	function on_load() {
     	$this->_sess_run();

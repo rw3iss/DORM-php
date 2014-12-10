@@ -1,0 +1,17 @@
+{
+    "name": "rw3iss/Dorm",
+    "description": "A basic backend+CMS+ORM for PHP!",
+    "homepage": "http://ryanweiss.net",
+    "repositories": [{
+        "type": "package",
+        "package": {
+            "name": "rw3iss/Dorm",
+            "version": "1.0.0",
+            "source": {
+                "url": "https://github.com/rw3iss/Dorm.git",
+                "type": "git",
+                "reference": "1.0.0"
+            }
+        }
+    }]
+}
