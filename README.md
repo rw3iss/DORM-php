@@ -3,5 +3,5 @@ This is an early implementation of an independent web framework which allows one
 
 NOTE:
 -Currently in the works, not all above features are working yet.
--FURTHERMORE: the project is currently being moved to a Laravel plugin, so all of this codebase will be change for the most part, shortly.
+-FURTHERMORE: the project is currently being moved to a Laravel plugin, so all of this codebase will be changed for the most part, shortly.
 
